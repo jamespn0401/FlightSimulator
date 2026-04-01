@@ -1,31 +1,37 @@
-CC = g++
-CFLAGS = -g -Wall
-RMF = rm -r -f
+CXX = g++
+CXXFLAGS = -Wall -g
 
-BUILD_DIR := ./Build
-SRC_DIRS := ./Sources
-SRCS := $(wildcard $(SRC_DIRS)/*.cpp $(SRC_DIRS)/*.c $(SRC_DIRS)/*.s)
-OBJS := $(patsubst $(SRC_DIRS)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
-MAIN := AudioMain
+BUILD_DIR = Build
+SRC_DIR = Sources
+OBJ_DIR = $(BUILD_DIR)/Objects
 
-# The final build step.
-$(BUILD_DIR)/$(MAIN): $(OBJS)
-	@echo "Linking $(MAIN)..."
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)/$(MAIN) $(OBJS)
+TARGET = $(BUILD_DIR)/AudioMain
+
+# Recursively find source files via wildcard (portable for GNU make, avoids external find/PowerShell nuance)
+SRCS := $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/*/*.cpp $(SRC_DIR)/*/*/*.cpp)
+OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+
+# Default rule to build and run the executable
+all: $(TARGET) run
+
+# Rule to link object files into the target executable
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
 
 # Rule to compile .cpp files into .o files
-$(BUILD_DIR)/%.o: $(SRC_DIRS)/%.cpp
-	@echo "Compiling $<..."
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# optional fallback for root-level source->object mapping if needed
+$(OBJ_DIR)/%.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Rule to run the executable
-run: $(BUILD_DIR)/$(MAIN)
-	@echo "Running $(MAIN)..."
-	$(BUILD_DIR)/$(MAIN)
+run: $(TARGET)
+	$(TARGET)
 
 # Clean rule to remove generated files
 clean:
-	@echo "Cleaning up..."
-	$(RMF) $(BUILD_DIR)
-
+	rm -rf $(BUILD_DIR)
