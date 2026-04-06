@@ -1,11 +1,11 @@
 CXX = g++
 CXXFLAGS = -Wall -g
 
-BUILD_DIR = Build
+BUILD_DIR = Builds
 SRC_DIR = Sources
 OBJ_DIR = $(BUILD_DIR)/Objects
 
-TARGET = $(BUILD_DIR)/AudioMain
+TARGET = $(BUILD_DIR)/App
 
 # Recursively find source files via wildcard (portable for GNU make, avoids external find/PowerShell nuance)
 SRCS := $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/*/*.cpp $(SRC_DIR)/*/*/*.cpp)
