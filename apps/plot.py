@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 configs = [
-    (0.2, 0.01, 0.1),
-    (0.3, 0.01, 0.15),
-    (0.5, 0.02, 0.2),
+    (0.3, 0.02, 0.5),
 ]
 
 exe_path = "build/bin/simulator.exe"

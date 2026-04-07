@@ -1,5 +1,4 @@
 #include "project/physics/Dynamics.hpp"
-
 #include "project/common/Constants.hpp"
 
 namespace project::physics

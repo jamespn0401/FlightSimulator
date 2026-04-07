@@ -1,6 +1,7 @@
 build
 .vscode/
 *.ps1
+scripts/
 venv/
 .venv/
 __pycache__/

@@ -44,7 +44,7 @@ namespace project::control
         sensors::Sensor sensor_;
 
         common::Scalar minThrustAcceleration_{0.0};
-        common::Scalar maxThrustAcceleration_{0.0};
+        common::Scalar maxThrustAcceleration_{20.0};
     };
 
 } // namespace project::control

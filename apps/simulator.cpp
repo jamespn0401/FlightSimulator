@@ -51,10 +51,7 @@ int main(int argc, char *argv[])
     constexpr project::common::Scalar kSimulationDurationSeconds = 30.0;
     constexpr project::common::Scalar kTargetAltitudeMeters = 100.0;
 
-    project::physics::State state{
-        altitudeMeters : 0.0,
-        velocityMetersPerSecond : 0.0
-    };
+    project::physics::State state{0.0, 0.0};
 
     project::control::FlightComputer flightComputer(
         kp,

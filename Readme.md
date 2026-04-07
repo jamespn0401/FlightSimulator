@@ -1,10 +1,43 @@
-# Flight Simulator
+# Flight Computer Simulator
 
-This project simulates a simplified aerospace flight computer system, implementing a closed-loop control system to maintain target altitude using PID control.
+A modular C++ flight control simulator that models vertical dynamics and evaluates PID controller performance through simulation, metrics analysis, and visualization.
 
----
+## Overview
 
-## 🚀 Build & Run
+This project simulates a 1D vertical flight system and implements a PID-based flight computer to track a target altitude. It is designed with a clean, scalable architecture to support control system experimentation, tuning, and analysis.
+
+### Core Capabilities
+
+- Physics-based altitude simulation
+- PID controller with configurable gains
+- Automated performance metrics:
+  - Overshoot
+  - Settling time
+  - Steady-state error
+- CSV output for analysis
+- Python-based visualization pipeline
+
+## Project Structure
+
+project/
+├── CMakeLists.txt
+├── include/project/
+│ ├── control/ # Flight control logic (PID, FlightComputer)
+│ ├── physics/ # State and system dynamics
+│ ├── sensors/ # Sensor abstraction
+│ └── common/ # Shared types, constants, metrics
+├── src/
+│ ├── control/
+│ ├── physics/
+│ └── sensors/
+├── tests/ # Unit tests
+├── apps/
+│ └── simulator_main.cpp
+├── output/ # Generated simulation CSVs
+└── scripts/
+└── plot.py # Visualization
+
+## 🚀 Build Instructions
 
 ### 1. Prerequisites
 
@@ -12,18 +45,7 @@ This project simulates a simplified aerospace flight computer system, implementi
 - C++17 compatible compiler (MSVC / GCC / Clang)
 - Python (optional, for plotting)
 
----
-
-### 2. Clone the Repository
-
-```bash
-git clone <your-repo-url>
-cd <your-repo-folder>
-```
-
----
-
-### 3. Build the Project
+### 2. Build the Project
 
 ```bash
 cmake -S . -B build
@@ -46,9 +68,7 @@ This will:
   - `build/bin/` (simulator)
   - `build/tests/` (tests)
 
----
-
-### 4. Run the Simulator
+### 3. Run the Simulator
 
 ```bash
 ./build/bin/simulator
@@ -72,17 +92,13 @@ This will generate CSV output in:
 output/
 ```
 
----
-
-### 5. Run Tests
+### 4. Run Tests
 
 ```bash
 ctest --test-dir build
 ```
 
----
-
-### 6. (Optional) Visualize Results
+### 5. (Optional) Visualize Results
 
 ```bash
 python ./apps/plot.py
@@ -93,9 +109,7 @@ This will:
 - Run multiple PID configurations
 - Plot altitude response comparisons
 
----
-
-### 7. Full Auto Workflow
+### 6. Full Auto Workflow
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -137,39 +151,13 @@ python ./apps/plot.py
 Write-Host "Done!"
 ```
 
----
+## 🧠 Metrics & Evaluation
 
----
+Each simulation run is evaluated using:
 
-## 🧠 System Overview
-
-The system models key avionics concepts including:
-
-- Sensor data acquisition
-- State estimation
-- Control algorithms
-- Actuator response
-- Telemetry logging
-
----
-
-## 🏗️ Architecture
-
-- **Sensor Module**: Simulates altitude, velocity, and acceleration inputs
-- **Physics Engine**: Updates system state based on control outputs
-- **Controller**: PID-based altitude control
-- **Actuator Module**: Applies thrust constraints
-- **Telemetry System**: Logs and exports system state
-
----
-
-## 📊 Example Output
-
-- Stable altitude hold
-- Oscillation under poor PID tuning
-- Response to disturbances
-
----
+- Overshoot (%)
+- Settling Time (seconds)
+- Steady-State Error
 
 ## 🛠 Tech Stack
 
@@ -177,56 +165,20 @@ The system models key avionics concepts including:
 - Python (visualization)
 - CSV (data logging)
 
----
-
-## 📚 What I Learned
-
-- Designing real-time simulation loops
-- Implementing PID control systems
-- Handling noisy sensor data
-- Structuring modular, testable systems
-
----
-
-## 🔮 Future Improvements
-
-- Kalman filter for state estimation
-- Hardware-in-the-loop integration (Arduino/Raspberry Pi)
-- Real-time dashboard
-
----
-
-## 📁 Project Structure
-
-```
-project/
-├── CMakeLists.txt
-├── include/
-├── src/
-├── tests/
-├── apps/
-└── output/
-```
-
----
-
-## ⚡ Notes
-
-- Default PID values are used if none are provided
-- Output files include PID parameters in the filename
-- Simulation runs for ~30 seconds of simulated time
-
----
-
--fg
-
 ## 📌 Next Steps
 
-- Add automated PID tuning
-- Add performance metrics (overshoot, settling time)
-- Generate plots automatically after simulation
-- Add CI/CD (GitHub Actions)
+- Automated PID tuning (grid search or optimization)
+- Batch simulation + scoring
+- Real-time visualization
+- Performance benchmarking table
 
----
+## Why This Project Matters
 
-This project is designed to demonstrate control systems, simulation design, and clean C++ architecture for real-time systems.
+This project demonstrates:
+
+- Strong C++ system design fundamentals
+- Control systems understanding
+- Clean separation of responsibilities
+- Data-driven engineering workflow
+
+It reflects patterns used in real-world aerospace and robotics systems.

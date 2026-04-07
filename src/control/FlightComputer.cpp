@@ -1,5 +1,4 @@
 #include "project/control/FlightComputer.hpp"
-
 #include "project/common/Constants.hpp"
 
 namespace project::control
@@ -12,11 +11,11 @@ namespace project::control
         common::Scalar minThrustAcceleration,
         common::Scalar maxThrustAcceleration)
         : pid_(kp, ki, kd),
+          sensor_(0.0, 0.0),
           minThrustAcceleration_(minThrustAcceleration),
           maxThrustAcceleration_(maxThrustAcceleration)
     {
     }
-
     //
     StepResult FlightComputer::step(
         physics::State &state,
