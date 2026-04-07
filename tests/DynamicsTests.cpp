@@ -31,5 +31,6 @@ int main()
     assert(std::abs(groundState.velocityMetersPerSecond - 0.0) < 1e-9);
     std::cout << "Passed ground velocity test: " << groundState.velocityMetersPerSecond << " m/s" << std::endl;
 
+    std::cout << "All Dynamics tests passed!" << std::endl;
     return 0;
 }

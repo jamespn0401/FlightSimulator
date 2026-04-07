@@ -17,6 +17,7 @@ namespace project::control
     {
     }
 
+    //
     StepResult FlightComputer::step(
         physics::State &state,
         common::Scalar targetAltitudeMeters,
@@ -42,11 +43,10 @@ namespace project::control
         const common::Scalar actualAcceleration =
             thrustCommand - common::kGravityMetersPerSecondSquared;
 
-        StepResult result{};
-        result.timeSeconds = timeSeconds;
-        result.sensorData = sensor_.read(state, actualAcceleration);
-        result.thrustCommandMetersPerSecondSquared = thrustCommand;
-        return result;
+        return StepResult{
+            timeSeconds,
+            sensor_.read(state, actualAcceleration),
+            thrustCommand};
     }
 
     common::Scalar FlightComputer::clamp(

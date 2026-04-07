@@ -6,12 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(TEST_OUTPUT_DIR ${CMAKE_BINARY_DIR}/tests)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_library(project_lib
     src/control/PIDController.cpp
     src/control/FlightComputer.cpp
     src/physics/Dynamics.cpp
     src/sensors/Sensor.cpp
+    src/common/Functions.cpp
 )
 
 target_include_directories(project_lib
@@ -21,9 +23,8 @@ target_include_directories(project_lib
 
 target_compile_options(project_lib
     PRIVATE
-        -Wall
-        -Wextra
-        -Wpedantic
+        $<$<CXX_COMPILER_ID:MSVC>:/W4>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
 )
 
 add_executable(simulator

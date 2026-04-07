@@ -11,20 +11,21 @@ namespace project::control
 
     struct StepResult
     {
-        common::Scalar timeSeconds{0.0};
+        common::Scalar timeSeconds{0.0}; // Current simulation time (seconds)
         sensors::SensorData sensorData{};
-        common::Scalar thrustCommandMetersPerSecondSquared{0.0};
+        common::Scalar thrustCommandMetersPerSecondSquared{0.0}; // Output command: desired thrust acceleration (m/s^2) sent to the system
     };
 
     class FlightComputer
     {
     public:
         FlightComputer(
-            common::Scalar kp,
-            common::Scalar ki,
-            common::Scalar kd,
-            common::Scalar minThrustAcceleration,
-            common::Scalar maxThrustAcceleration);
+            common::Scalar kp,                    // Proportional gain for PID (reacts to current error)
+            common::Scalar ki,                    // Integral gain (accumulates past error)
+            common::Scalar kd,                    // Derivative gain (reacts to rate of error change)
+            common::Scalar minThrustAcceleration, // Minimum allowed thrust acceleration (lower bound)
+            common::Scalar maxThrustAcceleration  // Maximum allowed thrust acceleration (upper bound)
+        );
 
         StepResult step(
             physics::State &state,
