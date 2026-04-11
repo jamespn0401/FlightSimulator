@@ -3,6 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+# Ensure output directory exists
+os.makedirs("output", exist_ok=True)
+
 configs = [
     (0.3, 0.02, 0.5),
 ]
