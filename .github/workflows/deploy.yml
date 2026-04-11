@@ -1,0 +1,80 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["Main CI"]
+    types:
+      - completed
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy to Ubuntu server
+    runs-on: ubuntu-latest
+
+    # Only deploy when:
+    # 1. the triggering workflow was Main CI
+    # 2. it succeeded
+    # 3. it came from a push to main
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.head_branch == 'main'
+      )
+
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # For workflow_run, check out the exact commit that passed CI
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy on server
+        run: |
+          ssh -i ~/.ssh/id_ed25519 "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" << 'EOF'
+            set -euo pipefail
+
+            PROJECT_DIR="$HOME/Applications/FlightSimulator"
+
+            if [ ! -d "$PROJECT_DIR/.git" ]; then
+              echo "❌ Project not found on server. Please set up the repository first."
+              exit 1
+            fi
+
+            cd "$PROJECT_DIR"
+            echo "✅ Found project, continuing..."
+            git fetch origin
+
+            # Check if local is behind remote
+            LOCAL=$(git rev-parse HEAD)
+            REMOTE=$(git rev-parse origin/main)
+            if [ "$LOCAL" = "$REMOTE" ]; then
+                echo "✅ No changes detected. Skipping rebuild."
+                exit 0
+            fi
+
+            echo "🚀 Changes detected. Updating..."
+            git checkout main
+            git reset --hard origin/main
+
+            cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+            cmake --build build --config Release
+            ctest --test-dir build --output-on-failure
+
+            echo "✅ Deployment complete."
+          EOF
