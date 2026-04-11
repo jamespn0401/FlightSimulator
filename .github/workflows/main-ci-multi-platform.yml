@@ -78,6 +78,8 @@ jobs:
           cmake --build build
 
       - name: Run Python unit tests
+        env:
+          PYTHONPATH: .
         run: pytest -q
 
       - name: Run integration script
