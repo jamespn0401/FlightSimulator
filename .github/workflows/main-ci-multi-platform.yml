@@ -38,13 +38,25 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.3
+
       - name: Configure CMake
         run: >
           cmake -S .
-          -B build
+          -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
           -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
           -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
           ${{ matrix.os == 'ubuntu-latest' && format('-DCMAKE_BUILD_TYPE={0}', matrix.build_type) || '' }}
+
+      - name: Cache sccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/sccache
+          key: ${{ runner.os }}-sccache-${{ hashFiles('**/*.cpp', '**/*.hpp') }}
+          restore-keys: |
+            ${{ runner.os }}-sccache-
 
       - name: Build
         run: cmake --build build --config ${{ matrix.build_type }}
