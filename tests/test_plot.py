@@ -1,6 +1,6 @@
 from unittest.mock import patch
 import pandas as pd
-import plot
+from apps import plot
 
 
 def make_fake_df():
@@ -12,11 +12,11 @@ def make_fake_df():
     })
 
 
-@patch("plot.subprocess.run")
-@patch("plot.pd.read_csv")
-@patch("plot.finalize_plot")
-@patch("plot.os.makedirs")
-@patch("plot.os.path.exists")
+@patch("apps.plot.subprocess.run")
+@patch("apps.plot.pd.read_csv")
+@patch("apps.plot.finalize_plot")
+@patch("apps.plot.os.makedirs")
+@patch("apps.plot.os.path.exists")
 def test_main_happy_path(
     mock_exists,
     mock_makedirs,
@@ -43,8 +43,8 @@ def test_main_happy_path(
     assert mock_finalize_plot.call_count == 2
 
 
-@patch("plot.os.makedirs")
-@patch("plot.os.path.exists", return_value=False)
+@patch("apps.plot.os.makedirs")
+@patch("apps.plot.os.path.exists", return_value=False)
 def test_main_raises_if_simulator_missing(mock_exists, mock_makedirs):
     try:
         plot.main()
@@ -53,9 +53,9 @@ def test_main_raises_if_simulator_missing(mock_exists, mock_makedirs):
         assert "Simulator not found" in str(exc)
 
 
-@patch("plot.subprocess.run")
-@patch("plot.os.makedirs")
-@patch("plot.os.path.exists")
+@patch("apps.plot.subprocess.run")
+@patch("apps.plot.os.makedirs")
+@patch("apps.plot.os.path.exists")
 def test_main_raises_if_csv_missing(mock_exists, mock_makedirs, mock_subprocess_run):
     def exists_side_effect(path):
         path = str(path)
@@ -72,13 +72,13 @@ def test_main_raises_if_csv_missing(mock_exists, mock_makedirs, mock_subprocess_
         assert "Expected CSV not found" in str(exc)
 
 
-@patch("plot.platform.system", return_value="Linux")
-@patch.dict("plot.os.environ", {"DISPLAY": ""}, clear=True)
+@patch("apps.plot.platform.system", return_value="Linux")
+@patch.dict("apps.plot.os.environ", {"DISPLAY": ""}, clear=True)
 def test_is_headless_true(mock_system):
     assert plot.is_headless() is True
 
 
-@patch("plot.platform.system", return_value="Windows")
-@patch.dict("plot.os.environ", {}, clear=True)
+@patch("apps.plot.platform.system", return_value="Windows")
+@patch.dict("apps.plot.os.environ", {}, clear=True)
 def test_is_headless_false_on_windows(mock_system):
     assert plot.is_headless() is False
