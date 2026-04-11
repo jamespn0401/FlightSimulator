@@ -83,7 +83,7 @@ jobs:
         run: pytest -q
 
       - name: Run integration script
-        run: python plot.py
+        run: python apps/plot.py
 
       - name: Upload plots
         uses: actions/upload-artifact@v4
