@@ -7,6 +7,7 @@ import subprocess
 import matplotlib
 
 # Detect headless Linux before importing pyplot to avoid backend issues
+# Testing CI/CD full run
 
 
 def is_headless() -> bool:
