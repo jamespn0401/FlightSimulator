@@ -54,9 +54,7 @@ cmake --build build
 
 ```powershell
 cmake -S . -B build `
-  -G "Unix Makefiles" `
-  -DCMAKE_C_COMPILER="C:/Users/JamesPN/VSCode/msys2/mingw64/bin/gcc.exe" `
-  -DCMAKE_CXX_COMPILER="C:/Users/JamesPN/VSCode/msys2/mingw64/bin/g++.exe"
+  -G "Ninja"
 cmake --build build
 ```
 
@@ -121,9 +119,7 @@ if (Test-Path build) {
 
 Write-Host "Configuring project..."
 cmake -S . -B build `
-  -G "Unix Makefiles" `
-  -DCMAKE_C_COMPILER="C:/Users/JamesPN/VSCode/msys2/mingw64/bin/gcc.exe" `
-  -DCMAKE_CXX_COMPILER="C:/Users/JamesPN/VSCode/msys2/mingw64/bin/g++.exe"
+  -G "Ninja"
 
 Write-Host "Building project..."
 cmake --build build
