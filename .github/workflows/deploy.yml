@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   workflow_run:
-    workflows: ["Main CI"]
+    workflows: ["Release"]
     types:
       - completed
   workflow_dispatch:
